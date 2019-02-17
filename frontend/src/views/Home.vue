@@ -1,19 +1,17 @@
 <template>
   <div class="home">
-    <!--<img alt="Vue logo" src="../assets/logo.png">-->
-    <p style="font-size: 100px">🅱</p>
-    <HelloWorld msg="CrashCam"/>
+    <Map />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import Map from '@/components/Map.vue';
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    Map
   }
 };
 </script>
