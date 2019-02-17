@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home text">
     <Map />
   </div>
 </template>
@@ -17,5 +17,11 @@ export default {
 </script>
 
 <style>
+  html{
+    background-color:  #E6ECF0;
+  }
+  .text{
+    color: #32496d;
+  }
 
 </style>

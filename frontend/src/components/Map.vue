@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>Welcome to Collision Cam!</h1>
     <MglMap
       v-bind:accessToken='key'
       v-bind:mapStyle='mapStyle'
@@ -73,4 +74,5 @@ export default {
 .mapboxgl-canvas {
   left: 8px;
 }
+ 
 </style>

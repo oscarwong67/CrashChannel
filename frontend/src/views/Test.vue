@@ -1,17 +1,20 @@
 <template>
-  <div>
-    <h1>This is the testing page</h1>
+  <div class="text">
+    <h1>Submit your photo</h1>
     <form @submit.prevent="handleSubmit">
       <label>
         Photo URL:
         <input type="url" v-model="url"/>
       </label>
+      <button v-on: click="handleSubmit">Submit</button><br><br>
+      <img v-bind:src="url" placeholder="">
     </form>
-    <img v-bind:src="url" placeholder="">
-  </div>
+</div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data () {
     return {
@@ -20,9 +23,9 @@ export default {
   },
   methods: {
     handleSubmit () {
-      const parsedUrl = encodeURI(this.url);
-      axios.get('/test?img=' + parsedUrl).then((response) => {
-
+      const url = encodeURI(this.url);
+      axios.get('/test?img=', {params: url}).then((response) => {
+        console.log(response);
       })
     }
   }
