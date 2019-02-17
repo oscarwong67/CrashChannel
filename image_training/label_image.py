@@ -1,3 +1,8 @@
+# MODIFIED BY MI[B]ROSOFT - CALGARYHACKS 2019 TEAM
+# This file is a modified version of Tensorflow Hub's "Image Retraining" Example
+# We heavily tweaked this original file from a command-line tool to a Flask-based REST API
+# To return the results of checking images against the model we trained with our own custom dataset.
+
 # Copyright 2017 The TensorFlow Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +28,7 @@ from io import BytesIO
 
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 
 import urllib
 
@@ -35,11 +41,16 @@ MODEL = "./big_model.pb"
 LABELS = "./retrained_labels.txt"
 
 app = Flask(__name__)
+CORS(app)
 @app.route('/test')
 def index():
   url = request.args.get('img')
   url = urllib.parse.unquote(url)
 
+  return runModel(url)
+
+
+def runModel(url):
   input_height = 299
   input_width = 299
   input_mean = 0
