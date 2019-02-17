@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Welcome to Collision Cam!</h1>
+    <h1>Welcome to CrashChannel!</h1>
     <MglMap
       v-bind:accessToken='key'
       v-bind:mapStyle='mapStyle'

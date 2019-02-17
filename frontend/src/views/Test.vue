@@ -18,14 +18,15 @@ import axios from 'axios';
 export default {
   data () {
     return {
-      url: ''
+      url: '',
+      result: ''
     };
   },
   methods: {
     handleSubmit () {
       const parsedUrl = encodeURI(this.url);
       axios.get('http://127.0.0.1:5000/test?img=' + parsedUrl).then((response) => {
-        console.log(response);
+        this.result = parseFloat(response.data.crashes) > 0.30 ? 'This is likely an image of a crash.' : 'This is image likely does not contain a crash.';
       })
     }
   }
