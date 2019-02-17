@@ -1,6 +1,7 @@
 <template>
   <div class="text">
     <h1>Submit your photo</h1>
+    <h3>{{ result }}</h3>
     <form @submit.prevent="handleSubmit">
       <label>
         Photo URL:
@@ -24,9 +25,11 @@ export default {
   },
   methods: {
     handleSubmit () {
+      this.result = 'Calculating...';
       const parsedUrl = encodeURI(this.url);
       axios.get('http://127.0.0.1:5000/test?img=' + parsedUrl).then((response) => {
-        this.result = parseFloat(response.data.crashes) > 0.30 ? 'This is likely an image of a crash.' : 'This is image likely does not contain a crash.';
+        console.log(response);
+        this.result = parseFloat(response.data.crashes) > 0.70 ? `With ${(response.data.crashes * 100).toFixed(2)}% certainty, I think this is a crash.` : `With ${(response.data['normal traffic'] * 100).toFixed(2)}% certainty, I think this is NOT a crash.`;
       })
     }
   }

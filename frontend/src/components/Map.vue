@@ -42,10 +42,9 @@ export default {
     };
   },  
   firestore () {
-    console.log('yo');
     return {
-      cameras: db.collection('cameras')
-    };
+      cameras: db.collection('demoCameras')
+    }
   },
   methods: {
     mapLoaded (event) {
