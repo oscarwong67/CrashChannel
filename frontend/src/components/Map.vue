@@ -8,15 +8,21 @@
       v-bind:minZoom='10'
       v-bind:center='center'
       @load='mapLoaded'
-    >
-      <MglMarker v-for="(camera, index) in cameras" v-bind:key="index" v-bind:coordinates="processCoords(camera)" v-bind:color="processColor(camera)" />
+      >
+      
+      <MglMarker v-for="(camera, index) in cameras" v-bind:key="index" v-bind:coordinates="processCoords(camera)" v-bind:color="processColor(camera)">
+        <MglPopup anchor="bottom">
+          <div><img class="popupimg" v-bind:src="camera.imageURL" /></div>
+        </MglPopup>
+      </MglMarker>
+      
     </MglMap>
   </div>
 </template>
 
 <script>
 import { db } from '../main.js';
-import { MglMap, MglMarker } from 'vue-mapbox';
+import { MglMap, MglMarker, MglPopup  } from 'vue-mapbox';
 import keys from '@/keys.json';
 import mapboxgl from 'mapbox-gl';
 
@@ -24,7 +30,8 @@ export default {
   name: 'Map',
   components: {
     MglMap,
-    MglMarker
+    MglMarker,
+    MglPopup 
   },
   data: function () {
     return {
@@ -37,7 +44,7 @@ export default {
   firestore () {
     console.log('yo');
     return {
-      cameras: db.collection('cameras'),
+      cameras: db.collection('cameras')
     };
   },
   methods: {
@@ -73,6 +80,11 @@ export default {
 
 .mapboxgl-canvas {
   left: 8px;
+}
+
+.popupimg {
+  max-width: 50px;
+  max-height: 50px;
 }
  
 </style>
