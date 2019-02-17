@@ -86,5 +86,8 @@ export default {
   max-width: 50px;
   max-height: 50px;
 }
- 
+
+.logo {
+  width: 8%;
+}
 </style>
