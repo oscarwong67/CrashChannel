@@ -13,7 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 
-MODEL_FILE = "bigmodel.pb"
+MODEL_FILE = "big_model.pb"
 LABEL_FILE = "retrained_labels.txt"
 
 from __future__ import absolute_import
@@ -90,42 +90,42 @@ def load_labels(label_file):
   return label
 
 @app.route("/test")
-  def testImage():
-    arg1 = request.args['img']
+def testImage():
+  arg1 = request.args['img']
 
-    model_file = MODEL_FILE
-    label_file = LABEL_FILE
-    input_height = 299
-    input_width = 299
-    input_mean = 0
-    input_std = 255
-    input_layer = "input"
-    output_layer = "InceptionV3/Predictions/Reshape_1"
+  model_file = MODEL_FILE
+  label_file = LABEL_FILE
+  input_height = 299
+  input_width = 299
+  input_mean = 0
+  input_std = 255
+  input_layer = "input"
+  output_layer = "InceptionV3/Predictions/Reshape_1"
 
-    # parse arg1 into url
-    # file_name = url
+  # parse arg1 into url
+  # file_name = url
 
-    graph = load_graph(model_file)
-    t = read_tensor_from_image_file(
-      file_name,
-      input_height=input_height,
-      input_width=input_width,
-      input_mean=input_mean,
-      input_std=input_std)
+  graph = load_graph(model_file)
+  t = read_tensor_from_image_file(
+    file_name,
+    input_height=input_height,
+    input_width=input_width,
+    input_mean=input_mean,
+    input_std=input_std)
 
-    input_name = "import/" + input_layer
-    output_name = "import/" + output_layer
-    input_operation = graph.get_operation_by_name(input_name)
-    output_operation = graph.get_operation_by_name(output_name)
+input_name = "import/" + input_layer
+output_name = "import/" + output_layer
+input_operation = graph.get_operation_by_name(input_name)
+output_operation = graph.get_operation_by_name(output_name)
 
-    with tf.Session(graph=graph) as sess:
-      results = sess.run(output_operation.outputs[0], {
-        input_operation.outputs[0]: t
-      })
-    results = np.squeeze(results)
+with tf.Session(graph=graph) as sess:
+  results = sess.run(output_operation.outputs[0], {
+    input_operation.outputs[0]: t
+  })
+results = np.squeeze(results)
 
-    top_k = results.argsort()[-5:][::-1]
-    labels = load_labels(label_file)
+top_k = results.argsort()[-5:][::-1]
+labels = load_labels(label_file)
 
       
     

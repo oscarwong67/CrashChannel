@@ -21,7 +21,7 @@ export default {
   methods: {
     handleSubmit () {
       const parsedUrl = encodeURI(this.url);
-      axios.get('/test?img=' + parsedUrl).then((response) => {
+      axios.get('http://127.0.0.1:5000/test?img=' + parsedUrl).then((response) => {
 
       })
     }

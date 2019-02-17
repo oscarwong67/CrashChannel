@@ -21,70 +21,13 @@ from PIL import Image
 import requests
 from io import BytesIO
 
-from flask import Flask
-from flask import request
-
-import urllib
-
-import sys
+import argparse
 
 import numpy as np
 import tensorflow as tf
 
 MODEL = "./big_model.pb"
 LABELS = "./retrained_labels.txt"
-
-app = Flask(__name__)
-@app.route('/test')
-def index():
-  url = request.args.get('img')
-  url = urllib.parse.unquote(url)
-
-  input_height = 299
-  input_width = 299
-  input_mean = 0
-  input_std = 255
-  input_layer = "input"
-  output_layer = "InceptionV3/Predictions/Reshape_1"
-
-  model_file = MODEL
-  label_file = LABELS
-  
-  file_name = url
-  input_layer = "Placeholder"
-  output_layer = "final_result"
-
-  graph = load_graph(model_file)
-  t = read_tensor_from_image_file(
-      file_name,
-      input_height=input_height,
-      input_width=input_width,
-      input_mean=input_mean,
-      input_std=input_std)
-
-  input_name = "import/" + input_layer
-  output_name = "import/" + output_layer
-  input_operation = graph.get_operation_by_name(input_name)
-  output_operation = graph.get_operation_by_name(output_name)
-
-  with tf.Session(graph=graph) as sess:
-    results = sess.run(output_operation.outputs[0], {
-        input_operation.outputs[0]: t
-    })
-  results = np.squeeze(results)
-
-  top_k = results.argsort()[-5:][::-1]
-  labels = load_labels(label_file)
-  res = ""
-  for i in top_k:
-    print(labels[i], results[i])
-    res += str(labels[i])
-    res += " "
-    res += str(results[i])
-    res += "\n"
-
-  return res
-
 
 def load_graph(model_file):
   graph = tf.Graph()
@@ -143,6 +86,64 @@ def load_labels(label_file):
     label.append(l.rstrip())
   return label
 
-if __name__ == "__main__":
-  app.run()
 
+if __name__ == "__main__":
+  input_height = 299
+  input_width = 299
+  input_mean = 0
+  input_std = 255
+  input_layer = "input"
+  output_layer = "InceptionV3/Predictions/Reshape_1"
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--image", help="image to be processed")
+  parser.add_argument("--input_height", type=int, help="input height")
+  parser.add_argument("--input_width", type=int, help="input width")
+  parser.add_argument("--input_mean", type=int, help="input mean")
+  parser.add_argument("--input_std", type=int, help="input std")
+  parser.add_argument("--input_layer", help="name of input layer")
+  parser.add_argument("--output_layer", help="name of output layer")
+  args = parser.parse_args()
+
+  model_file = MODEL
+  label_file = LABELS
+  
+  if args.image:
+    file_name = args.image
+  if args.input_height:
+    input_height = args.input_height
+  if args.input_width:
+    input_width = args.input_width
+  if args.input_mean:
+    input_mean = args.input_mean
+  if args.input_std:
+    input_std = args.input_std
+  if args.input_layer:
+    input_layer = args.input_layer
+  if args.output_layer:
+    output_layer = args.output_layer
+
+  graph = load_graph(model_file)
+  t = read_tensor_from_image_file(
+      file_name,
+      input_height=input_height,
+      input_width=input_width,
+      input_mean=input_mean,
+      input_std=input_std)
+
+  input_name = "import/" + input_layer
+  output_name = "import/" + output_layer
+  input_operation = graph.get_operation_by_name(input_name)
+  output_operation = graph.get_operation_by_name(output_name)
+
+  with tf.Session(graph=graph) as sess:
+    results = sess.run(output_operation.outputs[0], {
+        input_operation.outputs[0]: t
+    })
+  results = np.squeeze(results)
+
+  top_k = results.argsort()[-5:][::-1]
+  labels = load_labels(label_file)
+  for i in top_k:
+    print(labels[i], results[i])
+  print(input_layer)
