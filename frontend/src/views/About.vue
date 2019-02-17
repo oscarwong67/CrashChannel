@@ -1,5 +1,7 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div class="text">
+    <p style="font-size: 100px; margin: 0px 0px 0px">🅱</p>
+    <h1>Collision Cam</h1>
+    <p>Get live updates for car accidents around the city!</p>
   </div>
 </template>
