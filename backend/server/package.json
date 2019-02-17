@@ -1,0 +1,7 @@
+{
+  "name": "Mi[B]rosoft Node Backend",
+  "version": "1.0.0",
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
+}
