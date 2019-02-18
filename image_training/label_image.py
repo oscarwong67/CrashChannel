@@ -26,6 +26,12 @@ from PIL import Image
 import requests
 from io import BytesIO
 
+from flask import Flask
+from flask import request
+from flask_cors import CORS
+
+import urllib
+
 import sys
 
 import numpy as np
@@ -33,6 +39,16 @@ import tensorflow as tf
 
 MODEL = "./big_model.pb"
 LABELS = "./retrained_labels.txt"
+
+app = Flask(__name__)
+CORS(app)
+@app.route('/test')
+def index():
+  url = request.args.get('img')
+  url = urllib.parse.unquote(url)
+
+  return runModel(url)
+
 
 def runModel(url):
   input_height = 299
@@ -70,9 +86,14 @@ def runModel(url):
 
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(label_file)
-  res = {}
+  res = ""
   for i in top_k:
-    res[labels[i]] = float(results[i])
+    print(labels[i], results[i])
+    res += str(labels[i])
+    res += " "
+    res += str(results[i])
+    res += "\n"
+
   return res
 
 
@@ -132,3 +153,7 @@ def load_labels(label_file):
   for l in proto_as_ascii_lines:
     label.append(l.rstrip())
   return label
+
+if __name__ == "__main__":
+  app.run()
+
