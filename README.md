@@ -8,5 +8,5 @@ The project uses:
 * Google Cloud Firestore for the database, to keep track of each traffic camera.
 
 ## Contributing/Running
--Go into the `frontend` folder and run `npm install` to install the needed npm packages, then run `npm run serve` to start the Vue app.
--Go into the `image_training` folder, and run `python app.py`. Note, there are a bunch of packages in there that you'll need to install with pip, such as `Tensorflow` and `Flask`, but if the command line returns an error saying that something is missing, please install that, too.
+* Go into the `frontend` folder and run `npm install` to install the needed npm packages, then run `npm run serve` to start the Vue app.
+* Go into the `image_training` folder, and run `python app.py`. Note, there are a bunch of packages in there that you'll need to install with pip, such as `Tensorflow` and `Flask`, but if the command line returns an error saying that something is missing, please install that, too.
